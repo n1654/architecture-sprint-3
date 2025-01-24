@@ -9,6 +9,61 @@ servers:
     description: Local cluster service URL
 
 paths:
+  /swagger-ui/index.html:
+    get:
+      summary: Swagger UI Redirect
+      description: Redirect to Swagger UI
+      operationId: swagger-ui-redirect
+      responses:
+        '301':
+          description: Permanent Redirect
+          headers:
+            Location:
+              description: Redirects to Swagger UI
+              schema:
+                type: string
+                example: /swagger-ui/swagger-ui/index.html
+      x-kusk:
+        upstream:
+          service:
+            name: smart-home-monolith
+            namespace: default
+            port: 8080
+
+  /swagger-ui/swagger-ui/index.html:
+    get:
+      summary: Swagger UI
+      description: Access the Swagger UI documentation
+      operationId: swagger-ui
+      responses:
+        '200':
+          description: Swagger UI page
+          content:
+            text/html: {}
+      x-kusk:
+        upstream:
+          service:
+            name: smart-home-monolith
+            namespace: default
+            port: 8080
+
+  /v3/api-docs:
+    get:
+      summary: Swagger API Docs
+      description: Get the OpenAPI specification
+      operationId: swagger-docs
+      responses:
+        '200':
+          description: Swagger API documentation
+          content:
+            application/json: {}
+      x-kusk:
+        upstream:
+          service:
+            name: smart-home-monolith
+            namespace: default
+            port: 8080
+
   /api/heating/{id}:
     get:
       summary: Get heating system details
