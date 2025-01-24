@@ -61,7 +61,7 @@ public class HeatingSystemController {
 
     @GetMapping("/{id}/current-temperature")
     public ResponseEntity<Double> getCurrentTemperature(@PathVariable("id") Long id) {
-        logger.info("Fetching current temperature for heating system with id {}", id);
+        logger.info("Fetching Hej! current temperature for heating system with id {}", id);
         return ResponseEntity.ok(heatingSystemService.getCurrentTemperature(id));
     }
 
