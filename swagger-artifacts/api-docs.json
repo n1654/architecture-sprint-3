@@ -1,0 +1,222 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+      "title": "OpenAPI definition",
+      "version": "v0"
+    },
+    "servers": [
+      {
+        "url": "http://smart-home-monolith.default.svc.cluster.local.",
+        "description": "Generated server url"
+      }
+    ],
+    "paths": {
+      "/api/heating/{id}": {
+        "get": {
+          "tags": [
+            "heating-system-controller"
+          ],
+          "operationId": "getHeatingSystem",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HeatingSystemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "heating-system-controller"
+          ],
+          "operationId": "updateHeatingSystem",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HeatingSystemDto"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HeatingSystemDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/heating/{id}/turn-on": {
+        "post": {
+          "tags": [
+            "heating-system-controller"
+          ],
+          "operationId": "turnOn",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/heating/{id}/turn-off": {
+        "post": {
+          "tags": [
+            "heating-system-controller"
+          ],
+          "operationId": "turnOff",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/heating/{id}/set-temperature": {
+        "post": {
+          "tags": [
+            "heating-system-controller"
+          ],
+          "operationId": "setTargetTemperature",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            },
+            {
+              "name": "temperature",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "number",
+                "format": "double"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/heating/{id}/current-temperature": {
+        "get": {
+          "tags": [
+            "heating-system-controller"
+          ],
+          "operationId": "getCurrentTemperature",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "number",
+                    "format": "double"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "HeatingSystemDto": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "targetTemperature": {
+              "type": "number",
+              "format": "double"
+            },
+            "currentTemperature": {
+              "type": "number",
+              "format": "double"
+            },
+            "on": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    }
+  }
