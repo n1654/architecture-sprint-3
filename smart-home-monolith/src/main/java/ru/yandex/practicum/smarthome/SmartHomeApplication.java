@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableJpaRepositories
 @EnableTransactionManagement
-//@EnableSwagger2
+// @EnableSwagger2
 public class SmartHomeApplication {
     public static void main(String[] args) {
         SpringApplication.run(SmartHomeApplication.class, args);

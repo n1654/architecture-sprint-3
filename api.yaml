@@ -1,22 +1,193 @@
 openapi: 3.0.0
 info:
-  title: simple-api
-  version: 0.1.0
+  title: Heating System API
+  version: 1.0.0
+  description: API для управления системой отопления.
+
+servers:
+  - url: http://smart-home-monolith.default.svc.cluster.local:8080
+    description: Local cluster service URL
 
 paths:
-  /hello:
+
+  /:
     get:
-      responses:
-        '200':
-          description: A simple hello world!
-          content:
-            text/plain:
-              schema:
-                type: string
-              example: Hello from a mocked response!
+      summary: Universal route for Swagger UI
+      description: Proxy all requests under /swagger-ui.
       x-kusk:
         upstream:
           service:
-            name: hello-world-svc
+            name: smart-home-monolith
             namespace: default
             port: 8080
+
+  /v3/api-docs:
+    get:
+      summary: Swagger API Docs
+      description: Get the OpenAPI specification
+      operationId: swagger-docs
+      responses:
+        '200':
+          description: Swagger API documentation
+          content:
+            application/json: {}
+      x-kusk:
+        upstream:
+          service:
+            name: smart-home-monolith
+            namespace: default
+            port: 8080
+
+  /api/heating/{id}:
+    get:
+      summary: Get heating system details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Details of the heating system
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HeatingSystemDto'
+      x-kusk:
+        upstream:
+          service:
+            name: smart-home-monolith
+            namespace: default
+            port: 8080
+
+    put:
+      summary: Update heating system
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HeatingSystemDto'
+      responses:
+        '200':
+          description: Updated heating system
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HeatingSystemDto'
+      x-kusk:
+        upstream:
+          service:
+            name: smart-home-monolith
+            namespace: default
+            port: 8080
+
+  /api/heating/{id}/turn-on:
+    post:
+      summary: Turn on the heating system
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Heating system turned on
+      x-kusk:
+        upstream:
+          service:
+            name: smart-home-monolith
+            namespace: default
+            port: 8080
+
+  /api/heating/{id}/turn-off:
+    post:
+      summary: Turn off the heating system
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Heating system turned off
+      x-kusk:
+        upstream:
+          service:
+            name: smart-home-monolith
+            namespace: default
+            port: 8080
+
+  /api/heating/{id}/set-temperature:
+    post:
+      summary: Set target temperature
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: temperature
+          in: query
+          required: true
+          schema:
+            type: number
+            format: double
+      responses:
+        '204':
+          description: Target temperature set
+      x-kusk:
+        upstream:
+          service:
+            name: smart-home-monolith
+            namespace: default
+            port: 8080
+
+  /api/heating/{id}/current-temperature:
+    get:
+      summary: Get current temperature
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Current temperature
+          content:
+            application/json:
+              schema:
+                type: number
+                format: double
+      x-kusk:
+        upstream:
+          service:
+            name: smart-home-monolith
+            namespace: default
+            port: 8080
+
+components:
+  schemas:
+    HeatingSystemDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        currentTemperature:
+          type: number
+          format: double
+        targetTemperature:
+          type: number
+          format: double
