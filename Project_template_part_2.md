@@ -96,7 +96,45 @@ kubectl port-forward svc/kusk-gateway-envoy-fleet -n kusk-system 8080:80
 4. **Тестирование работы сервисов**
 Напишите, какие команды нужно использовать для тестирования.
 
-Можно предварительно создать в базе записи, затем выполнить запросы к сервису, например так:
+Можно предварительно создать в базе записи, например так:
+
+```
+$ kubectl exec -it smart-home-monolith-postgresql-0 -- /bin/bash
+
+I have no name!@smart-home-monolith-postgresql-0:/$ psql -h 127.0.0.1 -U your_username -d smart_home
+Password for user your_username: 
+psql (16.3)
+Type "help" for help.
+
+smart_home=> \dt
+                  List of relations
+ Schema |        Name         | Type  |     Owner     
+--------+---------------------+-------+---------------
+ public | heating_systems     | table | your_username
+ public | temperature_sensors | table | your_username
+(2 rows)
+
+
+smart_home=> SELECT * FROM heating_systems;
+  id  | is_on | target_temperature | current_temperature 
+------+-------+--------------------+---------------------
+ 1000 | t     |                 22 |                  20
+(1 row)
+
+
+smart_home=> INSERT INTO heating_systems (id, is_on, current_temperature, target_temperature) VALUES (1001, true, 25.0, 28.0);
+INSERT 0 1
+smart_home=> SELECT * FROM heating_systems;
+  id  | is_on | target_temperature | current_temperature 
+------+-------+--------------------+---------------------
+ 1000 | t     |                 22 |                  20
+ 1001 | t     |                 28 |                  25
+(2 rows)
+
+```
+
+
+затем выполнить запросы к сервису, например так:
 
 ```
 $ curl http://localhost:8080/api/heating/1000/current-temperature
